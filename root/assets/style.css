@@ -2,20 +2,34 @@
   --dark-orange: #8E3200;
   --text-tan: #FFEBC1;
   --text-darker-tan:#D7A86E; 
+  --all-text-sizes: larger;
 }
 * {
   background-color: var(--dark-orange);
+  
 }
 .large-font {
   font-size:xxx-large;
   text-align: center;
   color:var(--text-darker-tan);
 }
-.start-button {
-  color: var(--text-tan);
-  display: flex;
-  flex-wrap: wrap;
+#start-button {
+  font-size: var(--all-text-sizes);
+  color: var(--text-tantext-tan);
 }
-.timer {
+#timer {
   color: var(--text-darker-tan);
+  text-align: center;
+  font-size: var(--all-text-sizes);
+}
+#buttons {
+  color: var(--text-tan);
+}
+#view-scores {
+  font-size: var(--all-text-sizes);
+  color: var(--text-tan);
+}
+body {
+  color: var(--text-tan);
+  justify-content: center;
 }

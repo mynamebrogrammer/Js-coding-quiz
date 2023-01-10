@@ -1,184 +1,220 @@
-var time = 60;
-var quiz = [
-  {
-    question:
-      "What is the purpose of the `var` keyword in JavaScript?",
-    choices: [
-      "To declare a variable",
-      "To assign a value to a variable",
-      "To create a function",
-      "To end a block of code"
-    ],
-    answer: "To declare a variable"
-  },
-  {
-    question:
-      "What is the difference between a `for` loop and a `while` loop in JavaScript?",
-    choices: [
-      "A `for` loop is used to execute a block of code repeatedly, while a `while` loop is used to execute a block of code a specified number of times",
-      "A `for` loop is used to execute a block of code a specified number of times, while a `while` loop is used to execute a block of code repeatedly",
-      "There is no difference between `for` and `while` loops in JavaScript",
-      "`for` loops and `while` loops cannot be used in JavaScript"
-    ],
-    answer:
-      "A `for` loop is used to execute a block of code a specified number of times, while a `while` loop is used to execute a block of code repeatedly"
-  }
-];
-var timer = document.querySelector("timer");
-var scoresDiv = document.querySelector("scores-div");
-var viewScores = document.querySelector("view-scores");
-var startbtn = document.querySelector("start-button");
-startbtn.addEventListener("click", startTimer);
+// a variable for start time
+var secondsLeft = 76;
+var questions = [
+    {
+      title: "An array's length can be evaluated with the what property?",
+      multiChoice: [".length", ".log", "the console", ".loop"],
+      answer: ".length"
+    },
+  
+    {
+      title: "Within a loop, the 'break' keyword may be used to do what?",
+      multiChoice: ["break your competitors code", "exit the loop immediately", "repeat the loop", "indicate a stopping condition"],
+      answer: "exit the loop immediately"
+    },
+  
+    {
+      title: "Properties in a JavaScript oject are often refferred to as what?",
+      multiChoice: ["dot walking", "key-value pairs", "nested properties", "undefined"],
+      answer: "key-value pairs"
+    },
+  
+    {
+      title: "Which array method inserts an element at the end of the array?",
+      multiChoice: [".pop()", ".push()", ".length", ".join()"],
+      answer: ".push()"
+    },
+  
+    {
+      title: "What is a callback function?",
+      multiChoice: ["a function that accepts an array as an argument", "I function that performs an HTTP request", "a data type similar to a string or a boolean", "a function that is passed into another function as an argument"],
+      answer: "a function that is passed into another function as an argument"
+    }
+  ];
 
-var questionDiv = document.querySelector("question-div");
-var results = document.querySelector("results");
-var choices = document.querySelector("choices");
+//the element that displays the time
+var timer = document.getElementById("timer");
+
+//div for high scores
+var scoresDiv = document.getElementById("scores-div");
+
+var buttonsDiv = document.getElementById("buttons")
+
+//button for high scores
+var viewScoresBtn = document.getElementById("view-scores")
+
+//start button div
+var startButton = document.getElementById("start-button");
+startButton.addEventListener("click", setTime);
+
+
+// variable for the questions title
+var questionDiv = document.getElementById("question-div");
+
+// div to hold the results
+var results = document.getElementById("results");
+
+// div for the choices
+var choices = document.getElementById("choices");
+
+
+// an array to store high scores
 var emptyArray = [];
+
+// the array of high scores from local storage
 var storedArray = JSON.parse(window.localStorage.getItem("highScores"));
 
+// keeping track of which question we're on
 var questionCount = 0;
 
+//keeping score
 var score = 0
 
-
-function startTimer() {
-  var score = 0;
+//Timer starts when the user clicks startButton (see above).
+function setTime() {
   displayQuestions();
-  var timerInterval = setInterval(function () {
-    time--;
+  var timerInterval = setInterval(function() {
+    secondsLeft--;
     timer.textContent = "";
-    timer.textContent = "Time: " + time;
-    if (time <= 0 || questionCount === quiz.length) {
+    timer.textContent = "Time: " + secondsLeft;
+    if (secondsLeft <= 0 || questionCount === questions.length) {
       clearInterval(timerInterval);
-      saveScore();
-    }
+      captureUserScore();
+    } 
   }, 1000);
-  function displayQuestions() {
-    removeEls(startbtn);
+}
 
-    if (questionCount < quiz.length) {
-      questionDiv.textContent = quiz[questionCount].title;
-      choices.textContent = "";
+//function to load the questions on the page
+function displayQuestions() {
+  removeEls(startButton);
 
-      for (let i = 0; i < quiz[questionCount].choices.length; i++) {
-        var el = document.createElement("button");
-        el.children = quiz[questionCount].choices[i];
-        el.setAttribute("data-id", i);
-        el.addEventListener("click", function (event) {
-          event.stopPropagation();
-
-          if (el.children === quiz[questionCount].answer) {
-            score += time;
-          } else {
-            score -= 10;
-            time -= 15;
-          }
-
-          questionDiv.textContent = "";
-
-          if (questionCount === quiz.length) {
-            return;
-          } else {
-            questionCount++;
-            displayQuestions();
-          }
-        });
-        choices.append(el);
-      }
-    }
-  }
-  function saveScore() {
-    timer.remove();
+  if (questionCount < questions.length) {
+    questionDiv.innerHTML = questions[questionCount].title;
     choices.textContent = "";
 
-    var initials = document.createElement("input");
-    var postScore = document.createElement("input");
+    for (var i = 0; i < questions[questionCount].multiChoice.length; i++) {
+      var el = document.createElement("button");
+      el.innerText = questions[questionCount].multiChoice[i];
+      el.setAttribute("data-id", i);
+      el.addEventListener("click", function (event) {
+        event.stopPropagation();
 
-    results.children = 'you scored ' + score + 'points! Enter your initials: ';
-    initials = setAttribute("type", "text");
-    postScore = setAttribute("type", "button");
-    postScore = setAttribute("value", "Post My Score!");
+        if (el.innerText === questions[questionCount].answer) {
+          score += secondsLeft;
+        } else {
+          score -= 10;
+          secondsLeft = secondsLeft - 15;
+        }
+        
+        questionDiv.innerHTML = "";
 
-    postScore.addEventListener("click", function (event) {
-      event.preventDefault();
-      var scoresArray = defineScoresArray(storedArray, emptyArray);
-
-      var initialsInput = initials.value;
-      var saved = {
-        initialsInput: initialsInput, score: score,
-      };
-      scoresArray.push(saved);
-      saveScore(scoresArray);
-      displayAllScores();
-      clearScoresBtn();
-      goBackBtn();
-      viewScores.remove();
-    });
-    results.append(initials);
-    results.append(postScore);
-  }
-  var saveScore = (Array) => {
-    window.localStorage.setItem("highScores", JSON.stringify(array));
-
-  }
-  var defineScoresArray = (arr1, arr2) => {
-    if (arr1 !== null) {
-      return arr1
-    } else {
-      return arr2
+        if (questionCount === questions.length) {
+          return;
+        } else {
+          questionCount++;
+          displayQuestions();
+        }
+      });
+      choices.append(el);
     }
   }
-  var removeEls = (...els) => {
-    for (var el of els) el.remove();
-  }
-  function displayAllScores() {
-    removeEls(timer, startbtn, results);
+}
+
+
+function captureUserScore() {
+  timer.remove();
+  choices.textContent = "";
+
+  var initialsInput = document.createElement("input");
+  var postScoreBtn = document.createElement("input");
+
+  results.innerHTML = `You scored ${score} points! Enter initials: `;
+  initialsInput.setAttribute("type", "text");
+  postScoreBtn.setAttribute("type", "button");
+  postScoreBtn.setAttribute("value", "Post My Score!");
+  postScoreBtn.addEventListener("click", function (event) {
+    event.preventDefault();
     var scoresArray = defineScoresArray(storedArray, emptyArray);
 
-    scoresArray.forEach(obj => {
-      var initials = obj.initials;
-      var storedScore = obj.score;
-      var resultsP = document.createElement("p");
-      resultsP.innerText = `${initials}: ${storedScore}`;
-      scoresDiv.append(resultsP);
-    });
-  }
-  function viewScores() {
-    viewScores.addEventListener("click", function (event) {
-      event.preventDefault();
-      removeEls(timer, startbtn);
-      displayAllScores();
-      removeEls(viewScores);
-      clearScoresBtn();
-      goBackBtn();
-    });
-  }
-  function clearScoresBtn() {
-    var clearBtn = document.createElement("input");
-    clearBtn.setAttribute("type", "button");
-    clearBtn.setAttribute("value", "Clear Scores");
-    clearBtn.addEventListener("click", function (event) {
-      event.preventDefault();
-      removeEls(scoresDiv);
-      window.localStorage.removeItem("highScores");
-    })
-    scoresDiv.append(clearBtn)
-  }
-  function goBackBtn() {
-    var backBtn = document.createElement("input");
-    backBtn.setAttribute("type", "button");
-    backBtn.setAttribute("value", "Go Back");
-    backBtn.addEventListener("click", function (event) {
-      event.preventDefault();
-      window.location.reload();
-    })
-    buttonsDiv.append(backBtn)
-  }
-  viewScores();
-  //create a button for each loop and the value of them
-  // button will be choices [i]
-  //give each button a class of choice
-  //setting their values 
-  //Append button as a child top choices div
-  //(outside of for loop) query selecter all and create event listener for each element found with class of choice 
+    var initials = initialsInput.value;
+    var userAndScore = {
+      initials: initials,
+      score: score,
+    };
+
+    scoresArray.push(userAndScore);
+    saveScores(scoresArray);
+    displayAllScores();
+    clearScoresBtn();
+    goBackBtn();
+    viewScoresBtn.remove();
+  });
+  results.append(initialsInput);
+  results.append(postScoreBtn);
 }
+
+const saveScores = (array) => {
+  window.localStorage.setItem("highScores", JSON.stringify(array));
+}
+
+const defineScoresArray = (arr1, arr2) => {
+  if(arr1 !== null) {
+    return arr1
+  } else {
+    return arr2
+  }
+}
+
+const removeEls = (...els) => {
+  for (var el of els) el.remove();
+}
+
+function displayAllScores() {
+  removeEls(timer, startButton, results);
+  var scoresArray = defineScoresArray(storedArray, emptyArray);
+
+  scoresArray.forEach(obj => {
+    var initials = obj.initials;
+    var storedScore = obj.score;
+    var resultsP = document.createElement("p");
+    resultsP.innerText = `${initials}: ${storedScore}`;
+    scoresDiv.append(resultsP);
+  });
+}
+
+function viewScores() {
+  viewScoresBtn.addEventListener("click", function(event) {
+    event.preventDefault();
+    removeEls(timer, startButton);
+    displayAllScores();
+    removeEls(viewScoresBtn);
+    clearScoresBtn();
+    goBackBtn();
+  });
+}
+
+function clearScoresBtn() {    
+  var clearBtn = document.createElement("input");
+  clearBtn.setAttribute("type", "button");
+  clearBtn.setAttribute("value", "Clear Scores");
+  clearBtn.addEventListener("click", function(event){
+    event.preventDefault();
+    removeEls(scoresDiv);
+    window.localStorage.removeItem("highScores");
+  })
+  scoresDiv.append(clearBtn)
+}
+
+function goBackBtn() {
+  var backBtn = document.createElement("input");
+  backBtn.setAttribute("type", "button");
+  backBtn.setAttribute("value", "Go Back");
+  backBtn.addEventListener("click", function(event){
+    event.preventDefault();
+    window.location.reload();
+  })
+  buttonsDiv.append(backBtn)
+}
+
+
+viewScores();
