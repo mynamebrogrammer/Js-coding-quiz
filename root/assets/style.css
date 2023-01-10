@@ -1,0 +1,21 @@
+:root {
+  --dark-orange: #8E3200;
+  --text-tan: #FFEBC1;
+  --text-darker-tan:#D7A86E; 
+}
+* {
+  background-color: var(--dark-orange);
+}
+.large-font {
+  font-size:xxx-large;
+  text-align: center;
+  color:var(--text-darker-tan);
+}
+.start-button {
+  color: var(--text-tan);
+  display: flex;
+  flex-wrap: wrap;
+}
+.timer {
+  color: var(--text-darker-tan);
+}
