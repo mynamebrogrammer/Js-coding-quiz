@@ -1,5 +1,5 @@
 // a variable for start time
-var secondsLeft = 76;
+var secondsLeft = 60;
 var questions = [
     {
       title: "An array's length can be evaluated with the what property?",
@@ -88,7 +88,7 @@ function setTime() {
 function displayQuestions() {
   removeEls(startButton);
 
-  if (questionCount < questions.length) {
+  if (questionCount <= questions.length) {
     questionDiv.innerHTML = questions[questionCount].title;
     choices.textContent = "";
 
@@ -141,7 +141,7 @@ function captureUserScore() {
       initials: initials,
       score: score,
     };
-
+  
     scoresArray.push(userAndScore);
     saveScores(scoresArray);
     displayAllScores();
@@ -149,6 +149,26 @@ function captureUserScore() {
     goBackBtn();
     viewScoresBtn.remove();
   });
+  initialsInput.addEventListener("keydown", function (event) {
+    
+    if (event.key === "Enter") {
+      var scoresArray = defineScoresArray(storedArray, emptyArray);
+
+    var initials = initialsInput.value;
+    var userAndScore = {
+      initials: initials,
+      score: score,
+    };
+  
+    scoresArray.push(userAndScore);
+    saveScores(scoresArray);
+    displayAllScores();
+    clearScoresBtn();
+    goBackBtn();
+    viewScoresBtn.remove();
+    }
+      
+  })
   results.append(initialsInput);
   results.append(postScoreBtn);
 }
