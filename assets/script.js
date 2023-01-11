@@ -99,7 +99,7 @@ function displayQuestions() {
       el.addEventListener("click", function (event) {
         event.stopPropagation();
 
-        if (el.innerText === questions[questionCount].answer) {
+        if (event.target,this.innerText === questions[questionCount].answer) {
           score += secondsLeft;
         } else {
           score -= 10;
@@ -124,6 +124,7 @@ function displayQuestions() {
 function captureUserScore() {
   timer.remove();
   choices.textContent = "";
+  questionDiv.textContent = "";
 
   var initialsInput = document.createElement("input");
   var postScoreBtn = document.createElement("input");
