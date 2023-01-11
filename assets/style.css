@@ -2,7 +2,7 @@
   --dark-orange: #8E3200;
   --text-tan: #FFEBC1;
   --text-darker-tan:#D7A86E; 
-  --all-text-sizes: larger;
+  --all-text-sizes: 45px;
 }
 * {
   background-color: var(--dark-orange);
@@ -15,21 +15,36 @@
 }
 #start-button {
   font-size: var(--all-text-sizes);
-  color: var(--text-tantext-tan);
+  color: var(--text-tan)
+
+
 }
 #timer {
   color: var(--text-darker-tan);
-  text-align: center;
   font-size: var(--all-text-sizes);
+  display: flex;
+  align-items: flex-end;
 }
 #buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: var(--text-tan);
 }
 #view-scores {
   font-size: var(--all-text-sizes);
   color: var(--text-tan);
+  justify-content: end;
 }
-body {
+#question-div {
+  text-align: center;
   color: var(--text-tan);
-  justify-content: center;
+  font-size: xx-large;
+}
+#choices {
+  text-align: center;
+}
+#scores-div {
+  color:var(--text-darker-tan);
+  text-align: center;
 }
