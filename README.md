@@ -21,6 +21,8 @@ WHEN all questions are answered or the timer reaches 0
 THEN the game is over
 WHEN the game is over
 THEN I can save my initials and score
+
+# [Deployed Application](https://mynamebrogrammer.github.io/Js-coding-quiz/).
 ## upon load:
 ![Screenshot (202)](https://user-images.githubusercontent.com/79487250/211745308-5783b073-78f8-4b27-a8a6-a57fdfd712c0.png)
 
